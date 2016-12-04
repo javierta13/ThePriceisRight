@@ -34,6 +34,7 @@ var userPlaying = {};
 var numPlayers = 0;
 var roundStarted = false;
 var picked = "";
+var x = 0;
 
 function pickRandomProperty() {
     var result;
@@ -57,22 +58,38 @@ io.on('connection', function(socket){
         {
             if(numPlayers >= 6)
             {
+
                 roundStarted = true;
 
                 for (i = 0; i < 5; i++) //pick 5 random users
                 {
-                    var chosen = true;
+                    var already_picked = true;
+                    
 
-                    while(chosen === true)
+                    while(already_picked === true)
                     {
+                        var broke = false;
                         picked = pickRandomProperty();
-                        if(!userPlaying.hasOwnProperty(picked))
+                        for(var k in userPlaying)
+                        {                        
+                            if(userPlaying.hasOwnProperty(k))
+                            {
+                                if(userPlaying[k] === picked)
+                                {
+                                    broke = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(broke === false)
                         {
-                            chosen = false;
+                            already_picked = false;
+                            userPlaying[x] = picked;
                         }
                     }
                     console.log("picked: " + picked);
-                    userPlaying[picked] = picked;
+                    userPlaying[x] = picked;
+                    x += 1;
                 }       
                 for (var key in users) 
                 {
