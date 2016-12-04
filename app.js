@@ -56,29 +56,28 @@ var main = function ()
         alert("waiting for more players to join");
     });
 
-    socket.on("playing", function()
+    socket.on("playing", function(users, userPlaying)
     {
         alert("woah");
         $('.game').show();
+        $('#p1').text(users[userPlaying[0]]);
+        $('#p2').text(users[userPlaying[1]]);
+        $('#p3').text(users[userPlaying[2]]);
+        $('#p4').text(users[userPlaying[3]]);
+        $('#p5').text(users[userPlaying[4]]);                                
     });    
 
-    socket.on("spectating", function()
+    socket.on("spectating", function(users, userPlaying)
     {
-        alert("spectating");
+        $('.game').show();
+        $('#roundBid').hide();
+        $('#p1').text(users[userPlaying[0]]);
+        $('#p2').text(users[userPlaying[1]]);
+        $('#p3').text(users[userPlaying[2]]);
+        $('#p4').text(users[userPlaying[3]]);
+        $('#p5').text(users[userPlaying[4]]); 
     });
-    // Update User List
-
-    socket.on("round-in-session", function(userPlaying)
-    {
-        roundStarted = true;
-        $('#p1').val(userPlaying[0]);
-        $('#p2').val(userPlaying[1]);
-        $('#p3').val(userPlaying[2]);
-        $('#p4').val(userPlaying[3]);
-        $('#p5').val(userPlaying[4]);                                       
-    });    
-
-
+    
 
 
 

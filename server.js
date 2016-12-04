@@ -36,6 +36,7 @@ var roundStarted = false;
 var picked = "";
 var x = 0;
 
+/* http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object/15106541 */
 function pickRandomProperty() {
     var result;
     var count = 0;
@@ -50,7 +51,7 @@ io.on('connection', function(socket){
  
     socket.on("join", function(username, callback){
         users[socket.id] = username;
-        console.log(users[socket.id] + ' has connected' + socket.id);
+        console.log(users[socket.id] + ' has connected ' + socket.id);
 
         numPlayers += 1;
 
@@ -87,7 +88,7 @@ io.on('connection', function(socket){
                             userPlaying[x] = picked;
                         }
                     }
-                    console.log("picked: " + picked);
+                    console.log("picked: " + users[picked]);
                     userPlaying[x] = picked;
                     x += 1;
                 }       
@@ -102,18 +103,17 @@ io.on('connection', function(socket){
                             if(userPlaying.hasOwnProperty(key2))
                             {
 
-
                                 if(key === userPlaying[key2])
                                 {
                                     playing = true;
-                                    io.to(key).emit("playing");
+                                    io.to(key).emit("playing", users, userPlaying);
                                 }
                             }
                         }
                     }
                     if(playing === false)
                     {
-                        io.to(key).emit("spectating");
+                        io.to(key).emit("spectating", users, userPlaying);
                     }
                 }
             }
@@ -124,7 +124,7 @@ io.on('connection', function(socket){
         }
         else
         {
-            socket.emit("spectating");
+            socket.emit("spectating", users, userPlaying);
         }
     });
 
